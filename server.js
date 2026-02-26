@@ -7,9 +7,19 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 
-const PORT = 5000;
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://update-page-nu.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
+const PORT = process.env.PORT || 8000;
 
 const client = new MongoClient(process.env.MONGODB_URI);
 
@@ -47,7 +57,6 @@ async function startServer() {
     app.listen(PORT, () => {
       console.log(`🚀 Backend running on http://localhost:${PORT}`);
     });
-
   } catch (err) {
     console.error("❌ MongoDB Error:", err);
   }
